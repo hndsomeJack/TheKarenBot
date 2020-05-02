@@ -1,6 +1,0 @@
-# ignore the following
-/env
-/KarenBot.code-workspace
-/praw.ini
-/roxy.sqlite3
-/.vscode
