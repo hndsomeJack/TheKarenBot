@@ -25,7 +25,8 @@ karenList = ["You will call me by my husband's rank",
             "I demand this account be deleted.", 
             "I bet you were vaccinated.",
             "Think of the children",
-            "How dare you, on my daughter's birthday"]
+            "How dare you, on my daughter's birthday",
+            "My children were raised to be better than you"]
 karenSignature = "_Beep Boop, I'm a b*tch_"
 
 
