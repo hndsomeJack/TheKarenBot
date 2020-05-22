@@ -1,6 +1,0 @@
-
-
-
-from blackList import *
-
-printBlackList()
