@@ -173,7 +173,7 @@ for submission in subreddit.stream.submissions():
                     compareList.append(instance)
                 if cID not in compareList:
                     try:
-                        comment.reply(karenList[rand.randint(0,6)] + '\n\n' + karenSignature)
+                        comment.reply(karenList[rand.randint(0,10)] + '\n\n' + karenSignature)
                         session.add( Comment(post_title=postTitle, comment_id=cID, comment_body=cBody, user_id=cAuthor))
                         print('Replying to comment')
                     except praw.exceptions.RedditAPIException as exception:
