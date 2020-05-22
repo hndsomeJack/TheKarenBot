@@ -14,6 +14,7 @@ reddit = praw.Reddit('KarenBot')
 # each subreddit organies by .hot, .new, .controversial, .top, and .gilded
 # can also use engine search via .search("SEARCH_KEYWORDS")
 karenRegex = re.compile(r'a Karen', re.IGNORECASE)
+botRegex = re.compile(r'a bot', re.IGNORECASE)
 
 # karenList = ["Keep'm comin', pal, I went through child birth AND child death.", 
 #"Michaelllllllllll!!", "You will call me by my husband's rank"]
@@ -26,18 +27,19 @@ karenList = ["You will call me by my husband's rank",
             "I bet you were vaccinated.",
             "Think of the children",
             "How dare you, on my daughter's birthday",
-            "My children were raised to be better than you"]
+            "My children were raised to be better than you",
+            "I don't have time for yoga, grocery shopping, getting my kids to soccer practice, and dealing with your tone, young man."]
 karenSignature = "_Beep Boop, I'm a b*tch_"
 
 
 # create database connection and start it  
-Base = declarative_base() # Create initial Base class to defined mapped classes from
+Base = declarative_base() # Create initial Base class from which mapped classes will be defined
 
 engine = db.create_engine('sqlite:///roxy.sqlite3', echo=True) 
 connection = engine.connect()
 Base.metadata.create_all(engine)
 
-# Create session object, which is the ORM's "handle" to the database, allowing conversation withi it
+# Create session object, which is the ORM's "handle" to the database, allowing conversation within it
 # use session = Session() whenever need to talk to database
 Session = sessionmaker(bind=engine)
 
@@ -135,7 +137,8 @@ blackList = [
     "fuckyoukaren",
     "karen",
     "askteengirls",
-    "londonontario"
+    "londonontario",
+    "gendercritical"
 ]
 
 subreddit = reddit.subreddit("All")
