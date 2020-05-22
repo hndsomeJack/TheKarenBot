@@ -7,6 +7,7 @@ import random as rand
 from sqlalchemy import Column, String, MetaData, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import praw.exceptions
 
 
 reddit = praw.Reddit('KarenBot')
@@ -22,7 +23,9 @@ karenList = ["You will call me by my husband's rank",
             "This is not very _live love laugh_ of you. You should be ashamed of yourself.", 
             "My son's a vegetarian and you've got beef? I expect all downvotes to be removed from this order, and some free gold thrown in.", 
             "I demand this account be deleted.", 
-            "I bet you were vaccinated."]
+            "I bet you were vaccinated.",
+            "Think of the children",
+            "How dare you, on my daughter's birthday"]
 karenSignature = "_Beep Boop, I'm a b*tch_"
 
 
@@ -58,8 +61,6 @@ class Comment(Base):
 #session = Session()
 #session.add(dummy_post)
 #session.commit()
-
-
 
 
 blackList = [
@@ -133,6 +134,17 @@ blackList = [
     "fuckyoukaren",
     "karen"
 ]
+'''
+# Catch rate limit exception
+def try_get_seconds_to_wait(ex_msg=None):
+        try:
+            msg = ex_msg.lower()
+            search = re.search(r'\b(minutes)\b', msg)
+            minutes = int(msg[search.start()-2]) + 1
+            return minutes * 60
+        except:
+            return 60
+'''
 
 subreddit = reddit.subreddit("All")
 
@@ -148,6 +160,7 @@ for submission in subreddit.stream.submissions():
             cAuthor = comment.author.name
 
             karenMatch = karenRegex.search(cBody)
+            exceptionList = []
 
             if karenMatch is None:
                 continue
@@ -158,12 +171,20 @@ for submission in subreddit.stream.submissions():
                 for instance in session.query(Comment.comment_id):
                     compareList.append(instance)
                 if cID not in compareList:
-                    comment.reply(karenList[rand.randint(0,6)] + '\n\n' + karenSignature)
+                    try:
+                        comment.reply(karenList[rand.randint(0,6)] + '\n\n' + karenSignature)
+                        session.add( Comment(post_title=postTitle, comment_id=cID, comment_body=cBody, user_id=cAuthor))
+                        print('Replying to comment')
+                    except praw.exceptions.RedditAPIException as exception:
+                        for subException in exception.items:
+                            exceptionList.append(subException.error_type)
+                            print(exceptionList)
+                            
 
-                session.add( Comment(post_title=postTitle, comment_id=cID, comment_body=cBody, user_id=cAuthor))
-                print('Replying to comment')
                 
                     
+
+                
                 session.commit()
                 print(cBody)
                 print(cID)
