@@ -28,7 +28,8 @@ karenList = ["You will call me by my husband's rank",
             "Think of the children",
             "How dare you, on my daughter's birthday",
             "My children were raised to be better than you",
-            "I don't have time for yoga, grocery shopping, getting my kids to soccer practice, and dealing with your tone, young man."]
+            "I don't have time for yoga, grocery shopping, getting my kids to soccer practice, and dealing with your tone, young man.",
+            "Haven't you ever heard of customer serivce?"]
 karenSignature = "_Beep Boop, I'm a b*tch_"
 
 
@@ -170,7 +171,7 @@ for submission in subreddit.stream.submissions():
                     p_compareList.append(instance)
                 if cID not in c_compareList and postTitle not in p_compareList:
                     try:
-                        comment.reply(karenList[rand.randint(0,10)] + '\n\n' + karenSignature)
+                        comment.reply(karenList[rand.randint(0,11)] + '\n\n' + karenSignature)
                         session.add( Comment(post_title=postTitle, comment_id=cID, comment_body=cBody, user_id=cAuthor))
                         print('Replying to comment')
                     except praw.exceptions.RedditAPIException as exception:
