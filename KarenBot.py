@@ -135,22 +135,12 @@ blackList = [
     "fuckyoukaren",
     "karen"
 ]
-'''
-# Catch rate limit exception
-def try_get_seconds_to_wait(ex_msg=None):
-        try:
-            msg = ex_msg.lower()
-            search = re.search(r'\b(minutes)\b', msg)
-            minutes = int(msg[search.start()-2]) + 1
-            return minutes * 60
-        except:
-            return 60
-'''
 
 subreddit = reddit.subreddit("All")
 
 # Indefinitely iterate over submissions and comments in All
 for submission in subreddit.stream.submissions():
+    p_compareList = []
     if submission.subreddit not in blackList:
         postTitle = submission.title # store post title in case a match is found in next loop
         for comment in subreddit.stream.comments():
@@ -168,10 +158,12 @@ for submission in subreddit.stream.submissions():
             else:
                 print('Match found')
                 session = Session()
-                compareList = []
+                c_compareList = []
                 for instance in session.query(Comment.comment_id):
-                    compareList.append(instance)
-                if cID not in compareList:
+                    c_compareList.append(instance)
+                for instance in session.query(Comment.post_title):
+                    p_compareList.append(instance)
+                if cID not in c_compareList and postTitle not in p_compareList:
                     try:
                         comment.reply(karenList[rand.randint(0,10)] + '\n\n' + karenSignature)
                         session.add( Comment(post_title=postTitle, comment_id=cID, comment_body=cBody, user_id=cAuthor))
@@ -181,10 +173,6 @@ for submission in subreddit.stream.submissions():
                             exceptionList.append(subException.error_type)
                             print(exceptionList)
                             
-
-                
-                    
-
                 
                 session.commit()
                 print(cBody)
