@@ -1,0 +1,4 @@
+
+
+def printBlackList():
+    print(blackList)
